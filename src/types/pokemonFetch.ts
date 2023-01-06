@@ -10,7 +10,7 @@ export default interface PokemonDataType {
   png: string;
 }
 
-export const PokemonDataInit = [
+export const PokemonDataInit = 
   {
     ID: 1,
     name: "",
@@ -21,5 +21,5 @@ export const PokemonDataInit = [
     special_defense: 0,
     speed: 0,
     png: "",
-  },
-];
+  }
+;
