@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import BackgroundImage from "./../public/images/moroccan-flower.png";
+import { ChartInit } from "../src/modules/ChartInit";
+
 import {
   Chart as ChartJS,
   RadialLinearScale,
@@ -25,28 +28,11 @@ import { GetWindowSize } from "../src/modules/GetWindowSize";
 
 export default function Home() {
   const WindowSize = GetWindowSize();
-  console.log(WindowSize.width)
+  console.log(WindowSize.width);
 
-  const [pokemonData, setPokemonData] = useState<PokemonDataType>(PokemonDataInit)
-  const [ChartData, setChartData] = useState({
-    labels: [
-      "体力",
-      "攻撃",
-      "防御",
-      "特殊",
-      "特防",
-      "素早さ",
-    ],
-    datasets: [
-      {
-        label: `0 no name`,
-        data: [0, 0, 0, 0, 0, 0],
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        borderColor: "rgba(255, 99, 132, 1)",
-        borderWidth: 1,
-      },
-    ],
-  });
+  const [pokemonData, setPokemonData] =
+    useState<PokemonDataType>(PokemonDataInit);
+  const [ChartData, setChartData] = useState(ChartInit);
   const handleClick = async (ID: number | string) => {
     handleFetch(ID);
   };
@@ -74,22 +60,22 @@ export default function Home() {
           special_defense,
           speed,
           name,
-          png
+          png,
         };
         // setPokemonData(stats_json);
         const chartData = {
-          labels: [
-            "体力",
-            "攻撃",
-            "防御",
-            "特殊",
-            "特防",
-            "素早さ",
-          ],
+          labels: ["体力", "攻撃", "防御", "特殊", "特防", "素早さ"],
           datasets: [
             {
               label: `${ID} ${stats_json.name}`,
-              data: [stats_json.HP, stats_json.attack, stats_json.defense, stats_json.special_attack, stats_json.special_defense, stats_json.speed],
+              data: [
+                stats_json.HP,
+                stats_json.attack,
+                stats_json.defense,
+                stats_json.special_attack,
+                stats_json.special_defense,
+                stats_json.speed,
+              ],
               backgroundColor: "rgba(255, 99, 132, 0.2)",
               borderColor: "rgba(255, 99, 132, 1)",
               borderWidth: 1,
@@ -101,99 +87,78 @@ export default function Home() {
         setPokemonData(stats_json);
 
         console.log(stats_json);
-        console.log(pokemonData.png)
+        console.log(pokemonData.png);
 
         return stats_json;
       });
   };
-  // const ChangeID = (e) => {
+  const lists = [1, 2, 3];
 
-  // }
+  const chartOptions = {
+    scales: {
+      r: {
+        max: 200,
+        min: 0,
+        ticks: {
+          stepSize: 50
+        },
 
-  const lists = [1, 2];
+      }
+    }
+  }
 
   return (
     <>
-
-
-      <div className="carousel  w-full">
-        <div className="carousel-item w-1/2" >
-          <div>
-            <button onClick={(list) => { handleClick(pokemonData.ID) }}>検索</button>
-            <input
-              type="string"
-              value={pokemonData.ID}
-              onChange={(e) => {
-                setPokemonData({ ...pokemonData, ID: e.target.value });
-                console.log(e.target.value)
-              }}
-            />
-
-            {pokemonData.png !== "" ? (<Image
-              src={pokemonData.png}
-              alt={pokemonData.name}
-              width={WindowSize.width / 2}
-              height={WindowSize.width / 2}
-            />) : null}
-
-            {ChartData.datasets[0].data[0] !== 0 ? (<Radar data={ChartData} width={WindowSize.width / 2}
-              height={WindowSize.width / 2} />) : null}
-          </div>
-        </div>
-        <div className="carousel-item w-1/2" >
-          <div>
-            <button onClick={(list) => { handleClick(pokemonData.ID) }}>検索</button>
-            <input
-              type="string"
-              value={pokemonData.ID}
-              onChange={(e) => {
-                setPokemonData({ ...pokemonData, ID: e.target.value });
-                console.log(e.target.value)
-              }}
-            />
-
-            {pokemonData.png !== "" ? (<Image
-              src={pokemonData.png}
-              alt={pokemonData.name}
-              width={WindowSize.width / 2}
-              height={WindowSize.width / 2}
-            />) : null}
-
-            {ChartData.datasets[0].data[0] !== 0 ? (<Radar data={ChartData} width={WindowSize.width / 2}
-              height={WindowSize.width / 2} />) : null}
-          </div>
-        </div>
-
-
-        {/* {lists.map((list, index) => {
+      <div
+        className="carousel  w-full"
+        style={{
+          paddingTop: 70,
+          backgroundImage: `url(${BackgroundImage}) `,
+          backgroundRepeat: "repeat-y",
+        }}
+      >
+        {lists.map((list, index) => {
           return (
-            <div className="carousel-item w-1/2" >
+            <div className="carousel-item w-1/2" key={index}>
               <div>
-                <button onClick={(list) => { handleClick(pokemonData.ID) }}>検索</button>
+                <button
+                  onClick={(list) => {
+                    handleClick(pokemonData.ID);
+                  }}
+                >
+                  検索
+                </button>
                 <input
                   type="string"
                   value={pokemonData.ID}
                   onChange={(e) => {
                     setPokemonData({ ...pokemonData, ID: e.target.value });
-                    console.log(e.target.value)
+                    console.log(e.target.value);
                   }}
                 />
 
-                <Image
-                  src={pokemonData.png}
-                  alt={pokemonData.name}
-                  width={WindowSize.width / 2}
-                  height={WindowSize.width / 2}
-                />
+                {pokemonData.png !== "" ? (
+                  <Image
+                    src={pokemonData.png}
+                    alt={pokemonData.name}
+                    width={WindowSize.width / 2}
+                    height={WindowSize.width / 2}
+                  />
+                ) : null}
 
-                {ChartData.datasets[0].data[0] !== 0 ? (<Radar data={ChartData} />) : null}
+                {ChartData.datasets[0].data[0] !== 0 ? (
+                  <Radar
+                    data={ChartData}
+                    options={chartOptions}
+                    width={WindowSize.width / 2}
+                    height={WindowSize.width / 2}
+                  />
+                ) : null}
+                <t
               </div>
             </div>
-          )
-        })} */}
-
-
-
+          );
+        })}
       </div>
     </>
   );
